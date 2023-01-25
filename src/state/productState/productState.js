@@ -5,6 +5,7 @@ export const initailState = {
   error: null,
   cart: [],
   wish: [],
+  msg: "",
 }
 export const productReducer = (state, action) => {
   switch (action.type) {
@@ -15,11 +16,23 @@ export const productReducer = (state, action) => {
     case actionTypes.FETCHING_ERROR:
       return { ...state, loading: false, error: action.payload }
     case actionTypes.ADD_TO_CART:
-      return { ...state, cart: [...state.cart, action.payload] }
-      case actionTypes.ADD_TO_WISH:
-        return { ...state, wish: [...state.wish, action.payload] }
+      const exist_on_cart = state.cart.find(item => item._id === action.payload._id);
+      if (exist_on_cart) {
+        return { ...state, msg: "Item already exist on cart" }
+      } else {
+        return { ...state, msg: "", cart: [...state.cart, action.payload] }
+      }
+    case actionTypes.ADD_TO_WISH:
+      const exist_on_wish = state.wish.find(item => item._id === action.payload._id)
+      if (exist_on_wish) {
+        return { ...state, msg: "Item already exist on wishlist" }
+      } else {
+        return { ...state, msg: "", wish: [...state.wish, action.payload] }
+      }
     case actionTypes.REMOVE_FROM_CART:
       return { ...state, cart: state.cart.filter(item => item._id !== action.payload) }
+    case actionTypes.REMOVE_FROM_WISH:
+      return { ...state, wish: state.wish.filter(item => item._id !== action.payload) }
     default:
       return state;
   }
