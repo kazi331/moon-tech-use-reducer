@@ -7,7 +7,7 @@ const PRODUCT_CONTEXT = createContext();
 const ProductProvider = ({ children }) => {
   // load data using useReducer
   const [state, dispatch] = useReducer(productReducer, initailState);
-  console.log(state)
+
 
   useEffect(() => {
     dispatch({ type: actionTypes.FETCHING_START })
@@ -16,9 +16,11 @@ const ProductProvider = ({ children }) => {
       .then(data => dispatch({ type: actionTypes.FETCHING_SUCCESS, payload: data }))
       .catch(err => dispatch({ type: actionTypes.FETCHING_ERROR, payload: err }))
   }, [])
-
+  const value = {
+    state, dispatch
+  }
   return (
-    <PRODUCT_CONTEXT.Provider value={state}>
+    <PRODUCT_CONTEXT.Provider value={value}>
       {children}
     </PRODUCT_CONTEXT.Provider>
   )
@@ -26,8 +28,8 @@ const ProductProvider = ({ children }) => {
 
 // custom hook for loading data
 export const useProducts = () => {
-  const context = useContext(PRODUCT_CONTEXT);
-  return context;
+  const products = useContext(PRODUCT_CONTEXT);
+  return products;
 }
 
 export default ProductProvider
