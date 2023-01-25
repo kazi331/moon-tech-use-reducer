@@ -7,8 +7,6 @@ const PRODUCT_CONTEXT = createContext();
 const ProductProvider = ({ children }) => {
   // load data using useReducer
   const [state, dispatch] = useReducer(productReducer, initailState);
-  console.log(state)
-
 
   useEffect(() => {
     dispatch({ type: actionTypes.FETCHING_START })
